@@ -17,5 +17,13 @@
     "require": {
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.4"
+    },
+    "require-dev": {
+        "pestphp/pest": "^1.21"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }
