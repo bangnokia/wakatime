@@ -2,7 +2,9 @@
 
 namespace BangNokia\WakaTime;
 
-class Paginator
+use BangNokia\WakaTime\Resources\Resource;
+
+class Paginator extends Resource
 {
     protected array $data;
 
@@ -16,9 +18,24 @@ class Paginator
 
     protected int $totalPages;
 
-    public function __construct()
+    public function __construct(array $attributes)
     {
+        parent::__construct($attributes);
+    }
 
+    public static function fromResponse(array $response): static
+    {
+        return new static($response);
+    }
+
+    public function apply(string $class): static
+    {
+        $this->data = array_map(
+            fn($item) => new $class($item),
+            $this->data
+        );
+
+        return $this;
     }
 
     /**

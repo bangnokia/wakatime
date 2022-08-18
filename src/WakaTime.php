@@ -3,6 +3,7 @@
 namespace BangNokia\WakaTime;
 
 use BangNokia\Wakatime\Contracts\WakaTime as WakaTimeContract;
+use BangNokia\WakaTime\Resources\Project;
 use GuzzleHttp\Client;
 use Psr\Http\Client\ClientInterface;
 
@@ -52,6 +53,6 @@ class WakaTime implements WakaTimeContract
     {
         $response = $this->request('GET', '/users/'.$user.'/projects');
 
-        return new Paginator($response['data'], $response['pagination']);
+        return Paginator::fromResponse($response)->apply(Project::class);
     }
 }
