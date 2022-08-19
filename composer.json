@@ -8,6 +8,11 @@
             "BangNokia\\WakaTime\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "bangnokia",
@@ -19,7 +24,8 @@
         "guzzlehttp/guzzle": "^7.4"
     },
     "require-dev": {
-        "pestphp/pest": "^1.21"
+        "pestphp/pest": "^1.21",
+        "pestphp/pest-plugin-mock": "^1.0"
     },
     "config": {
         "allow-plugins": {

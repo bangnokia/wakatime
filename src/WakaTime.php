@@ -2,7 +2,7 @@
 
 namespace BangNokia\WakaTime;
 
-use BangNokia\Wakatime\Contracts\WakaTime as WakaTimeContract;
+use BangNokia\WakaTime\Contracts\WakaTime as WakaTimeContract;
 use BangNokia\WakaTime\Resources\Project;
 use GuzzleHttp\Client;
 use Psr\Http\Client\ClientInterface;
@@ -15,11 +15,13 @@ class WakaTime implements WakaTimeContract
 
     protected Client $client;
 
-    public function __construct(string $apiKey)
+    public function __construct(string $apiKey, Client $client = null)
     {
         $this->apiKey = $apiKey;
 
-        $this->client = $this->makeDefaultClient();
+        if ($client === null) {
+            $this->client = $this->makeDefaultClient();
+        }
     }
 
     protected function makeDefaultClient(): ClientInterface
