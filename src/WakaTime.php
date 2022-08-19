@@ -17,19 +17,27 @@ class WakaTime implements WakaTimeContract
 
     public function __construct(string $apiKey, Client $client = null)
     {
-        $this->apiKey = $apiKey;
+        $this->setApiKey($apiKey);
 
-        if ($client === null) {
-            $this->client = $this->makeDefaultClient();
+        if ($client !== null) {
+            $this->client = $client;
         }
     }
 
-    protected function makeDefaultClient(): ClientInterface
+    protected function setApiKey(string $apiKey): static
     {
-        return new Client([
+        $this->apiKey = $apiKey;
+
+        $this->client = new Client([
             'base_uri' => $this->serviceUrl,
-            'timeout'  => 30,
+            'headers'  => [
+                'Authorization' => 'Basic '.base64_encode($this->apiKey),
+                'Accept'        => 'application/json',
+                'Content-Type'  => 'application/json',
+            ],
         ]);
+
+        return $this;
     }
 
     public function setClient($client): static
@@ -42,10 +50,7 @@ class WakaTime implements WakaTimeContract
     public function request(string $method, string $endpoint, array $payload = []): array
     {
         $response = $this->client->request($method, $endpoint, [
-            'json'    => $payload,
-            'headers' => [
-                'Authorization' => "Basic ".base64_encode($this->apiKey),
-            ],
+            'json' => $payload,
         ]);
 
         return json_decode($response->getBody()->getContents(), true);
@@ -57,4 +62,5 @@ class WakaTime implements WakaTimeContract
 
         return Paginator::fromResponse($response)->apply(Project::class);
     }
+
 }
