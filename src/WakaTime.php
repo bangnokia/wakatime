@@ -9,6 +9,8 @@ use Psr\Http\Client\ClientInterface;
 
 class WakaTime implements WakaTimeContract
 {
+    use MakeHttpRequests;
+
     protected string $serviceUrl = 'https://wakatime.com/api/v1';
 
     protected string $apiKey;
@@ -49,16 +51,16 @@ class WakaTime implements WakaTimeContract
 
     public function request(string $method, string $endpoint, array $payload = []): array
     {
-        $response = $this->client->request($method, $endpoint, [
-            'json' => $payload,
-        ]);
+        $options = $payload ? ['json' => $payload] : [];
+
+        $response = $this->client->request($method, $endpoint, $options);
 
         return json_decode($response->getBody()->getContents(), true);
     }
 
     public function projects(string $user = 'current'): Paginator
     {
-        $response = $this->request('GET', '/users/'.$user.'/projects');
+        $response = $this->get('users/'.$user.'/projects');
 
         return Paginator::fromResponse($response)->apply(Project::class);
     }
