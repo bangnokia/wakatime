@@ -51,7 +51,7 @@ class WakaTime implements WakaTimeContract
 
     public function request(string $method, string $endpoint, array $payload = []): array
     {
-        $options = $payload ? ['json' => $payload] : [];
+        $options = !empty($payload) ? ['json' => $payload] : [];
 
         $response = $this->client->request($method, $endpoint, $options);
 
