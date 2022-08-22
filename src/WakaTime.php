@@ -5,7 +5,6 @@ namespace BangNokia\WakaTime;
 use BangNokia\WakaTime\Contracts\WakaTime as WakaTimeContract;
 use BangNokia\WakaTime\Resources\Project;
 use GuzzleHttp\Client;
-use Psr\Http\Client\ClientInterface;
 
 class WakaTime implements WakaTimeContract
 {
@@ -15,14 +14,14 @@ class WakaTime implements WakaTimeContract
 
     protected string $apiKey;
 
-    protected Client $client;
+    protected Client $guzzleClient;
 
     public function __construct(string $apiKey, Client $client = null)
     {
         $this->setApiKey($apiKey);
 
         if ($client !== null) {
-            $this->client = $client;
+            $this->guzzleClient = $client;
         }
     }
 
@@ -30,7 +29,7 @@ class WakaTime implements WakaTimeContract
     {
         $this->apiKey = $apiKey;
 
-        $this->client = new Client([
+        $this->guzzleClient = new Client([
             'base_uri' => $this->serviceUrl,
             'headers'  => [
                 'Authorization' => 'Basic '.base64_encode($this->apiKey),
@@ -44,7 +43,7 @@ class WakaTime implements WakaTimeContract
 
     public function setClient($client): static
     {
-        $this->client = $client;
+        $this->guzzleClient = $client;
 
         return $this;
     }
@@ -53,7 +52,7 @@ class WakaTime implements WakaTimeContract
     {
         $options = !empty($payload) ? ['json' => $payload] : [];
 
-        $response = $this->client->request($method, $endpoint, $options);
+        $response = $this->guzzleClient->request($method, $endpoint, $options);
 
         return json_decode($response->getBody()->getContents(), true);
     }

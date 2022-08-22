@@ -85,4 +85,9 @@ class Paginator extends Resource
     {
         return $this->totalPages;
     }
+
+    public function count(): int
+    {
+        return count($this->data);
+    }
 }
