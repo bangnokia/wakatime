@@ -1,5 +1,7 @@
 <?php
 
+afterEach(fn() => Mockery::close());
+
 it('can make request to wakatime', function () {
     $http = Mockery::mock(GuzzleHttp\Client::class);
     $wakatime = new BangNokia\WakaTime\WakaTime('322', $http);

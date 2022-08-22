@@ -7,4 +7,4 @@ it('can get list projects of user', function () {
     $projects = $api->projects();
 
     $this->assertInstanceOf(\BangNokia\WakaTime\Paginator::class, $projects);
-});
+})->skip();
