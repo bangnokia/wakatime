@@ -4,6 +4,7 @@ namespace BangNokia\WakaTime;
 
 use BangNokia\WakaTime\Contracts\WakaTime as WakaTimeContract;
 use BangNokia\WakaTime\Resources\Project;
+use BangNokia\WakaTime\Resources\Summaries;
 use GuzzleHttp\Client;
 
 class WakaTime implements WakaTimeContract
@@ -15,6 +16,8 @@ class WakaTime implements WakaTimeContract
     protected string $apiKey;
 
     protected Client $client;
+
+    protected string $user = 'current';
 
     public function __construct(string $apiKey, Client $client = null)
     {
@@ -41,6 +44,13 @@ class WakaTime implements WakaTimeContract
         return $this;
     }
 
+    public function setUser(string $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     public function setClient($client): static
     {
         $this->client = $client;
@@ -57,10 +67,17 @@ class WakaTime implements WakaTimeContract
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function projects(string $user = 'current'): Paginator
+    public function projects(): Paginator
     {
-        $response = $this->get('users/'.$user.'/projects');
+        $response = $this->get('users/'.$this->user.'/projects');
 
         return Paginator::fromResponse($response)->apply(Project::class);
+    }
+
+    public function summaries(array $parameters): Summaries
+    {
+        $response = $this->get("users/$this->user/summaries", $parameters);
+
+        return new Summaries($response);
     }
 }

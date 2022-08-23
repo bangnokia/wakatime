@@ -8,11 +8,11 @@ class Project extends Resource
 
     public string $name;
 
-    public string $repository;
+    public ?string $repository;
 
-    public string $badge;
+    public ?string $badge;
 
-    public string $color;
+    public ?string $color;
 
     public bool $hasPublicUrl;
 
