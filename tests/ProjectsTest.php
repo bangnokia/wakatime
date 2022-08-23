@@ -5,7 +5,7 @@ use BangNokia\WakaTime\WakaTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 
-it('can get list projects of user', function () {
+it('can get list project of user', function () {
     $api = new WakaTime('api-key', $http = Mockery::mock(Client::class));
 
     $http->shouldReceive('request')->once()
